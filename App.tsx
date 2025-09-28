@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { editImageWithGemini } from './services/geminiService';
+import { editImageWithGemini, isConfigured as isGeminiConfigured } from './services/geminiService';
 import ImageUploader from './components/ImageUploader';
 import ImageDisplay from './components/ImageDisplay';
 import Loader from './components/Loader';
@@ -465,6 +465,31 @@ const App: React.FC = () => {
           </button>
       );
   };
+  
+  if (!isGeminiConfigured) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-gray-200 flex flex-col items-center justify-center p-8 text-center">
+        <AlertTriangleIcon className="w-16 h-16 text-red-500 mb-6" />
+        <h1 className="text-3xl font-bold text-red-400 mb-4">Configuration Error</h1>
+        <p className="text-lg text-gray-300 max-w-2xl mb-2">
+          The application is missing the required API key for the AI service. This is common during first-time deployment.
+        </p>
+        <p className="text-md text-gray-400 max-w-2xl">
+          To fix this, you need to add an environment variable to your deployment settings (e.g., on Vercel, Netlify, or your hosting provider).
+        </p>
+        <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 mt-6 text-left max-w-xl w-full">
+          <p className="text-lg font-semibold text-cyan-400 mb-3">Add the following Environment Variable:</p>
+          <div className="flex items-center bg-gray-900 p-3 rounded-md">
+            <code className="text-gray-200 font-mono text-md"><span className="text-gray-500">Key:</span> API_KEY</code>
+          </div>
+          <div className="flex items-center bg-gray-900 p-3 rounded-md mt-2">
+            <code className="text-gray-200 font-mono text-md"><span className="text-gray-500">Value:</span> your_gemini_api_key_here</code>
+          </div>
+          <p className="text-sm text-gray-500 mt-4">After adding the variable, you must redeploy your application for the change to take effect.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 font-sans flex flex-col">

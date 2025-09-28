@@ -1,5 +1,5 @@
 {
-  "name": "AI Photo Editor: Future Vision",
+  "name": "AI Photo Editor",
   "description": "An AI-powered photo editor with a futuristic theme. Upload an image and use text prompts to transform it into a piece of cyberpunk art. The app uses Gemini to intelligently edit and reimagine your photos.",
   "requestFramePermissions": []
 }

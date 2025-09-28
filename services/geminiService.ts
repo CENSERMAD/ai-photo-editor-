@@ -1,11 +1,16 @@
 
 import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
 
-if (!process.env.API_KEY) {
-  throw new Error("API_KEY environment variable not set");
+let ai: GoogleGenAI | null = null;
+export let isConfigured = false;
+
+if (process.env.API_KEY) {
+  ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  isConfigured = true;
+} else {
+  console.error("API_KEY environment variable not set. App will run in a degraded mode.");
 }
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 const model = 'gemini-2.5-flash-image-preview';
 
 interface EditResult {
@@ -18,6 +23,9 @@ export const editImageWithGemini = async (
   mimeType: string,
   prompt: string
 ): Promise<EditResult> => {
+  if (!ai) {
+    throw new Error("Gemini AI service is not configured. Please set the API_KEY environment variable.");
+  }
   try {
     const response: GenerateContentResponse = await ai.models.generateContent({
       model: model,
